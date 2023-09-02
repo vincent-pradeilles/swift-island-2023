@@ -191,5 +191,48 @@ zip(2, 7, "Hello", Bool.random() ? 42.0 : nil)
 // For now, Value Pack Expansion can only be used inside a function argument list or
 // a tuple, so this quickly brings in a strong amount of limitations 🙃
 
+// But actually that's not the whole truth! Because while there indeed is no syntax
+// to iterate over the Value Pack, it's still possible to collect the values in a
+// tuple and iterate over the members of that tuple by using reflection!
+
+func totalCount<each C: Collection>(_ collection: repeat each C) -> Int {
+    let collectionsTuple = (repeat each collection)
+    
+    let mirror = Mirror(reflecting: collectionsTuple)
+    
+    let children = mirror.children
+            
+    let collections = children.compactMap { $0.value as? any Collection }
+    
+    let counts = collections.map(\.count)
+    
+    let totalCount = counts.reduce(0, +)
+    
+    return totalCount
+}
+
+// However be very careful, because this approach seems to work...
+
+totalCount(
+    [1, 2, 3],
+    ["Hello", "Swift Island!"]
+)
+
+totalCount(
+    [1, 2, 3],
+    ["Hello", "Swift Island!"],
+    [42.0, 100.0, 0.0]
+)
+
+// ...until it doesn't:
+
+totalCount(
+    [1, 2, 3]
+)
+
+// Here the reason is that when the tuple contain only a single array, then
+// the collection is automatically flattened and the `children` becimes the elements
+// of the array instead of the array itself.
+
 // To learn more about these limitations, I recommend reading the Swift Evolution Proposal:
 // https://github.com/apple/swift-evolution/blob/main/proposals/0393-parameter-packs.md
