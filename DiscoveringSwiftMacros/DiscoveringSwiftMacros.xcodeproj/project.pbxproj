@@ -84,6 +84,8 @@
 			dependencies = (
 			);
 			name = DiscoveringSwiftMacros;
+			packageProductDependencies = (
+			);
 			productName = DiscoveringSwiftMacros;
 			productReference = BF8C46BE2AA3616500B36825 /* DiscoveringSwiftMacros */;
 			productType = "com.apple.product-type.tool";
@@ -112,6 +114,8 @@
 				Base,
 			);
 			mainGroup = BF8C46B52AA3616500B36825;
+			packageReferences = (
+			);
 			productRefGroup = BF8C46BF2AA3616500B36825 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
