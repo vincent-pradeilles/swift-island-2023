@@ -27,6 +27,7 @@
 		BF8C46C12AA3616500B36825 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		BF8C46C82AA361F500B36825 /* MyMacro */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MyMacro; path = ../MyMacro; sourceTree = "<group>"; };
 		BF8C46C92AA36D6600B36825 /* URLMacro */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = URLMacro; path = ../URLMacro; sourceTree = "<group>"; };
+		BF8C46CB2AA4B85000B36825 /* CaseDetection */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CaseDetection; path = ../CaseDetection; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +44,7 @@
 		BF8C46B52AA3616500B36825 = {
 			isa = PBXGroup;
 			children = (
+				BF8C46CB2AA4B85000B36825 /* CaseDetection */,
 				BF8C46C92AA36D6600B36825 /* URLMacro */,
 				BF8C46C82AA361F500B36825 /* MyMacro */,
 				BF8C46C02AA3616500B36825 /* DiscoveringSwiftMacros */,
