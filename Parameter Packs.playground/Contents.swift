@@ -140,7 +140,7 @@ alternateFirsts([1, 2, 3], ["a", "b", "c"])
 
 // Let's try to build a `makePairs()` function that would be called as follows:
 // `makePairs(firsts: 1, 2, "c", "d", seconds: "a", "b", 3, 4)`, and would return:
-// `[(1, "a"), (2, "b"), ("c", 3), ("d", 4)]`
+// `((1, "a"), (2, "b"), ("c", 3), ("d", 4))`
 
 func makePairs<each First, each Second>(
     firsts: repeat each First,
@@ -191,11 +191,64 @@ zip(2, 7, "Hello", Bool.random() ? 42.0 : nil)
 // For now, Value Pack Expansion can only be used inside a function argument list or
 // a tuple, so this quickly brings in a strong amount of limitations 🙃
 
-// But actually that's not the whole truth! Because while there indeed is no syntax
-// to iterate over the Value Pack, it's still possible to collect the values in a
+// But actually that's not the whole truth! Because while there's indeed is no syntax
+// to iterate over the Value Pack, it's still possible to go around that limitation
+// with a creative use of the expansion mechanism!
+
+func totalCount<each C: Collection>(
+    _ collection: repeat each C
+) -> Int {
+    var result = 0
+    repeat (result += (each collection).count)
+    return result
+}
+
+totalCount(
+    [1, 2, 3]
+)
+
+totalCount(
+    [1, 2, 3],
+    ["Hello", "Swift Island!"]
+)
+
+totalCount(
+    [1, 2, 3],
+    ["Hello", "Swift Island!"],
+    [42.0, 100.0, 0.0]
+)
+
+struct NotEqual: Error {}
+
+func areEqual<each Element: Equatable>(
+    _ left: (repeat each Element),
+    _ right: (repeat each Element)
+) -> Bool {
+    
+    func throwIfNotEqual<T: Equatable>(
+        _ left: T,
+        _ right: T
+    ) throws {
+        guard left == right else { throw NotEqual() }
+    }
+    
+    do {
+        repeat try throwIfNotEqual(each left, each right)
+    } catch {
+        return false
+    }
+    
+    return true
+}
+
+areEqual((42, "Hello", "Swift Connection"), (42, "Hello", "Swift Connection"))
+
+areEqual((42, "Hello"), (42, "Swift Connection"))
+
+// Another possibility is to collect the values in a
 // tuple and iterate over the members of that tuple by using reflection!
 
-func totalCount<each C: Collection>(_ collection: repeat each C) -> Int {
+func totalCount2<each C: Collection>(_ collection: repeat each C) -> Int {
     let collectionsTuple = (repeat each collection)
     
     let mirror = Mirror(reflecting: collectionsTuple)
@@ -213,12 +266,12 @@ func totalCount<each C: Collection>(_ collection: repeat each C) -> Int {
 
 // However be very careful, because this approach seems to work...
 
-totalCount(
+totalCount2(
     [1, 2, 3],
     ["Hello", "Swift Island!"]
 )
 
-totalCount(
+totalCount2(
     [1, 2, 3],
     ["Hello", "Swift Island!"],
     [42.0, 100.0, 0.0]
@@ -226,7 +279,7 @@ totalCount(
 
 // ...until it doesn't:
 
-totalCount(
+totalCount2(
     [1, 2, 3]
 )
 
