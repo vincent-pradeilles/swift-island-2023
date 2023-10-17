@@ -60,7 +60,9 @@ let tuple2 = groupInTuple(42, "Hello!")
 
 // That's when parameter packs come into play 💪
 
-func groupInTuple<each T>(_ value: repeat each T) -> (repeat each T) {
+func groupInTuple<each T>(
+    _ value: repeat each T
+) -> (repeat each T) {
     return (repeat each value)
 }
 
@@ -289,3 +291,19 @@ totalCount2(
 
 // To learn more about these limitations, I recommend reading the Swift Evolution Proposal:
 // https://github.com/apple/swift-evolution/blob/main/proposals/0393-parameter-packs.md
+
+// Finally, let's have a look at one last example: how to use Parameter Packs
+// to return closures with arbitrary number of arguments.
+
+// This can be very useful if you store event handlers in SwiftUI's Environement,
+// to be alerted in case you forgot to inject the actual handler in your code.
+
+func makeDefaultHandler<each T>() -> (repeat each T) -> Void {
+    return { (_: repeat each T) in
+        assertionFailure("Default handler has been called")
+    }
+}
+
+let defaultHandler1: () -> Void = makeDefaultHandler()
+let defaultHandler2: (Int) -> Void = makeDefaultHandler()
+let defaultHandler3: (String, Int) -> Void = makeDefaultHandler()
